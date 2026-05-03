@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webserver-ingress
+  namespace: web-demo
+  labels:
+    customer: acme-trading
+    compliance: mifid-ii
+  annotations:
+    # NOTE: the legacy alb.ingress.kubernetes.io/actions.redirect-to-trading
+    # annotation has been intentionally removed — fabiorollin.com now serves
+    # the portfolio landing page directly instead of 301'ing to trading.
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:807291695385:certificate/11842121-0d3a-4e27-ae42-e6119793b896
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/success-codes: 200-399
+spec:
+  ingressClassName: alb
+  rules:
+    - host: fabiorollin.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: webserver
+                port: { number: 80 }
+    - host: www.fabiorollin.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: webserver
+                port: { number: 80 }
+    - host: trading.fabiorollin.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: webserver
+                port: { number: 80 }

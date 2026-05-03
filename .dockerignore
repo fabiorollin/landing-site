@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.env
+.env.*
+*.log
+backup-before-option3-*
+src/App - Copy.jsx
+src/App.jsx.old
+src/index - Copy.css
