@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local backups + scratch files (excluded from the public repo)
+backup-before-option3-*/
+src/*.old
+src/* - Copy.*
